@@ -1,0 +1,133 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Used by ProsperOps - www.prosperops.com. Must remain in place for ProsperOps to function correctly. Email help@prosperops.com for assistance.",
+  "Resources": {
+    "ProsperOpsRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "ProsperOps",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::205499583182:root"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "a9ee2775eab24b97a51e28e7ae6091a5544ee059ef6948c9a49d65e8857733fe"
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "ProsperOps",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ce:Get*",
+                    "ce:List*",
+                    "cur:DescribeReportDefinitions",
+                    "ec2:AcceptReservedInstancesExchangeQuote",
+                    "ec2:CancelReservedInstancesListing",
+                    "ec2:CreateReservedInstancesListing",
+                    "ec2:DescribeAccountAttributes",
+                    "ec2:DescribeAvailabilityZones",
+                    "ec2:DescribeCapacityReservations",
+                    "ec2:DescribeImages",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeReservedInstances",
+                    "ec2:DescribeReservedInstancesListings",
+                    "ec2:DescribeReservedInstancesModifications",
+                    "ec2:DescribeReservedInstancesOfferings",
+                    "ec2:GetCapacityReservationUsage",
+                    "ec2:GetReservedInstancesExchangeQuote",
+                    "ec2:ModifyReservedInstances",
+                    "ec2:PurchaseReservedInstancesOffering",
+                    "organizations:DescribeOrganization",
+                    "organizations:ListAccounts",
+                    "savingsplans:CreateSavingsPlan",
+                    "savingsplans:Describe*",
+                    "servicequotas:GetServiceQuota",
+                    "servicequotas:ListRequestedServiceQuotaChangeHistoryByQuota"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:GetRolePolicy",
+                    "iam:ListRolePolicies",
+                    "iam:SimulatePrincipalPolicy"
+                  ],
+                  "Resource": "arn:aws:iam::*:role/ProsperOps"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "sns:CreateTopic",
+                    "sns:GetTopicAttributes",
+                    "sns:ListSubscriptionsByTopic",
+                    "sns:SetTopicAttributes",
+                    "sns:Subscribe"
+                  ],
+                  "Resource": "arn:aws:sns:*:*:ProsperOps-EC2-Instance-State-Changes"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "events:DescribeRule",
+                    "events:ListTargetsByRule",
+                    "events:PutRule",
+                    "events:PutTargets"
+                  ],
+                  "Resource": "arn:aws:events:*:*:rule/ProsperOps-EC2-Instance-State-Changes"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:CreateBucket",
+                    "s3:ListBucket",
+                    "s3:PutBucketPolicy",
+                    "s3:PutBucketVersioning"
+                  ],
+                  "Resource": "arn:aws:s3:::prosperops-cur-*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:DeleteObject",
+                    "s3:DeleteObjectVersion",
+                    "s3:GetObject"
+                  ],
+                  "Resource": "arn:aws:s3:::prosperops-cur-*/*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cur:DeleteReportDefinition",
+                    "cur:ModifyReportDefinition",
+                    "cur:PutReportDefinition"
+                  ],
+                  "Resource": "arn:aws:cur:*:*:definition/prosperops-*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": "servicequotas:RequestServiceQuotaIncrease",
+                  "Resource": "arn:aws:servicequotas:*:*:ec2/L-D0B7243C"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

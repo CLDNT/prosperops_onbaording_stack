@@ -1,0 +1,87 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Used by ProsperOps - www.prosperops.com. Must remain in place for ProsperOps to function correctly. Email help@prosperops.com for assistance.",
+  "Resources": {
+    "ProsperOpsRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "ProsperOps",
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::205499583182:root"
+              },
+              "Action": "sts:AssumeRole",
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "a9ee2775eab24b97a51e28e7ae6091a5544ee059ef6948c9a49d65e8857733fe"
+                }
+              }
+            }
+          ]
+        },
+        "Policies": [
+          {
+            "PolicyName": "ProsperOps",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ce:GetCostAndUsage",
+                    "ce:GetDimensionValues",
+                    "ce:GetReservationCoverage",
+                    "ce:GetReservationUtilization",
+                    "ce:GetSavingsPlansCoverage",
+                    "ce:GetSavingsPlansUtilization",
+                    "ce:GetSavingsPlansUtilizationDetails",
+                    "cur:DescribeReportDefinitions",
+                    "organizations:DescribeOrganization",
+                    "organizations:ListAccounts"
+                  ],
+                  "Resource": "*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "iam:GetRolePolicy",
+                    "iam:ListRolePolicies",
+                    "iam:SimulatePrincipalPolicy"
+                  ],
+                  "Resource": "arn:aws:iam::*:role/ProsperOps"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "s3:CreateBucket",
+                    "s3:ListBucket",
+                    "s3:PutBucketPolicy",
+                    "s3:PutBucketVersioning"
+                  ],
+                  "Resource": "arn:aws:s3:::prosperops-cur-*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": "s3:GetObject",
+                  "Resource": "arn:aws:s3:::prosperops-cur-*/*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "cur:ModifyReportDefinition",
+                    "cur:PutReportDefinition"
+                  ],
+                  "Resource": "arn:aws:cur:*:*:definition/prosperops-*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
